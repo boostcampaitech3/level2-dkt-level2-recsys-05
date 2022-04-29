@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 
-class Preprocess:
+class LSTMPreprocess:
     def __init__(self, bargs):
         self.args = bargs
         self.train_data = None
