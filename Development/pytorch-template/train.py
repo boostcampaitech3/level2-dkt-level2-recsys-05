@@ -6,11 +6,10 @@ import data_loader.data_loaders as module_data
 import model.loss as module_loss
 import model.metric as module_metric
 import model.model as module_arch
+import importlib
 from parse_config import ConfigParser
-from trainer import trainer as module_trainer
 from utils import prepare_device
 from box import Box
-
 
 # fix random seeds for reproducibility
 SEED = 123
@@ -50,7 +49,10 @@ def main(config):
     lr_scheduler = config.init_obj("lr_scheduler", torch.optim.lr_scheduler, optimizer)
 
     print(config["trainer"]["type"])
-    trainer_module = getattr(module_trainer, config["trainer"]["type"])
+    trainer_module = getattr(
+        importlib.import_module(f'trainer.{config["trainer"]["type"]}'),
+        config["trainer"]["type"],
+    )
 
     trainer = trainer_module(
         model,
