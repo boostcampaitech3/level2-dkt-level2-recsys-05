@@ -1,6 +1,5 @@
 import numpy as np
 import torch
-from torchvision.utils import make_grid
 from base import BaseTrainer
 from utils import inf_loop, MetricTracker
 
@@ -62,7 +61,6 @@ class Trainer(BaseTrainer):
             target = data[3]
 
             # data, target = data.to(self.device), target.to(self.device)
-
             self.optimizer.zero_grad()
             output = self.model(data)
             loss = self.criterion(output, target)
@@ -75,7 +73,10 @@ class Trainer(BaseTrainer):
             self.writer.set_step((epoch - 1) * self.len_epoch + batch_idx)
             self.train_metrics.update("loss", loss.item())
             for met in self.metric_ftns:
-                self.train_metrics.update(met.__name__, met(output, target))
+                # self.train_metrics.update(met.__name__, met(output, target))
+                self.train_metrics.update(
+                    met.__name__, met(output[:, -1].view(-1), target[:, -1].view(-1))
+                )
 
             if batch_idx % self.log_step == 0:
                 self.logger.debug(
@@ -106,8 +107,6 @@ class Trainer(BaseTrainer):
         """
         self.model.eval()
         self.valid_metrics.reset()
-        total_pred = []
-        total_target = []
         with torch.no_grad():
             # for batch_idx, (data, target) in enumerate(self.valid_data_loader):
             for batch_idx, batch in enumerate(self.data_loader):
@@ -117,7 +116,6 @@ class Trainer(BaseTrainer):
 
                 # TODO: 모든 모델 Input과 output은 모델안에서 device로
                 # data, target = data.to(self.device), target.to(self.device)
-
                 output = self.model(data)
                 loss = self.criterion(output, target)
                 loss = loss[:, -1]
@@ -129,7 +127,11 @@ class Trainer(BaseTrainer):
                 self.valid_metrics.update("loss", loss.item())
 
                 for met in self.metric_ftns:
-                    self.valid_metrics.update(met.__name__, met(output, target))
+                    # self.valid_metrics.update(met.__name__, met(output, target))
+                    self.valid_metrics.update(
+                        met.__name__,
+                        met(output[:, -1].view(-1), target[:, -1].view(-1)),
+                    )
 
         # add histogram of model parameters to the tensorboard
         for name, p in self.model.named_parameters():
