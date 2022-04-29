@@ -12,11 +12,14 @@
     "data_loader": {
         "type": "IscreamDataLoader",
         "args":{
-            "data_dir": "data/",
+            "data_dir": "/opt/ml/input/data/",
             "batch_size": 64,
             "shuffle": true,
             "validation_split": 0.3,
-            "num_workers": 5
+            "num_workers": 5,
+            "asset_dir" : "asset/",
+            "file_name" : "train_data.csv",
+            "max_seq_len" : 20
         }
     },
     "optimizer": {
@@ -39,6 +42,7 @@
         }
     },
     "trainer": {
+        "type" : "LSTMTrainer",
         "epochs": 20,
 
         "save_dir": "saved/",

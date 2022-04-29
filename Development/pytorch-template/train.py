@@ -7,7 +7,7 @@ import model.loss as module_loss
 import model.metric as module_metric
 import model.model as module_arch
 from parse_config import ConfigParser
-from trainer import Trainer
+from trainer import trainer as module_trainer
 from utils import prepare_device
 from box import Box
 
@@ -49,7 +49,10 @@ def main(config):
     optimizer = config.init_obj("optimizer", torch.optim, trainable_params)
     lr_scheduler = config.init_obj("lr_scheduler", torch.optim.lr_scheduler, optimizer)
 
-    trainer = Trainer(
+    print(config["trainer"]["type"])
+    trainer_module = getattr(module_trainer, config["trainer"]["type"])
+
+    trainer = trainer_module(
         model,
         criterion,
         metrics,
