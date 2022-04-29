@@ -1,32 +1,35 @@
 {
-    "name": "Mnist_LeNet",
+    "name": "LSTM_test",
     "n_gpu": 1,
 
     "arch": {
-        "type": "MnistModel",
-        "args": {}
+        "type": "LSTM",
+        "args": {
+            "hidden_dim" : 64,
+            "n_layers" : 2
+        }
     },
     "data_loader": {
-        "type": "MnistDataLoader",
+        "type": "IscreamDataLoader",
         "args":{
             "data_dir": "data/",
-            "batch_size": 128,
+            "batch_size": 64,
             "shuffle": true,
-            "validation_split": 0.1,
-            "num_workers": 2
+            "validation_split": 0.3,
+            "num_workers": 5
         }
     },
     "optimizer": {
         "type": "Adam",
         "args":{
-            "lr": 0.001,
+            "lr": 0.0001,
             "weight_decay": 0,
             "amsgrad": true
         }
     },
-    "loss": "nll_loss",
+    "loss": "bce_loss",
     "metrics": [
-        "mnist_accuracy", "top_k_acc"
+        "accuracy", "roc_auc"
     ],
     "lr_scheduler": {
         "type": "StepLR",
@@ -36,14 +39,14 @@
         }
     },
     "trainer": {
-        "epochs": 100,
+        "epochs": 20,
 
         "save_dir": "saved/",
         "save_period": 1,
         "verbosity": 2,
 
         "monitor": "min val_loss",
-        "early_stop": 10,
+        "early_stop": 5,
 
         "tensorboard": true
     }

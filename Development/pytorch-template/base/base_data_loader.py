@@ -1,14 +1,43 @@
 import numpy as np
 from torch.utils.data import DataLoader
-from torch.utils.data.dataloader import default_collate
+
+# from torch.utils.data.dataloader import default_collate
 from torch.utils.data.sampler import SubsetRandomSampler
+import torch
+
+
+def collate(batch):
+    col_n = len(batch[0])
+    col_list = [[] for _ in range(col_n)]
+    max_seq_len = len(batch[0][-1])
+
+    # batch의 값들을 각 column끼리 그룹화
+    for row in batch:
+        for i, col in enumerate(row):
+            pre_padded = torch.zeros(max_seq_len)
+            pre_padded[-len(col) :] = col
+            col_list[i].append(pre_padded)
+
+    for i, _ in enumerate(col_list):
+        col_list[i] = torch.stack(col_list[i])
+
+    return tuple(col_list)
 
 
 class BaseDataLoader(DataLoader):
     """
     Base class for all data loaders
     """
-    def __init__(self, dataset, batch_size, shuffle, validation_split, num_workers, collate_fn=default_collate):
+
+    def __init__(
+        self,
+        dataset,
+        batch_size,
+        shuffle,
+        validation_split,
+        num_workers,
+        collate_fn=collate,
+    ):
         self.validation_split = validation_split
         self.shuffle = shuffle
 
@@ -18,11 +47,11 @@ class BaseDataLoader(DataLoader):
         self.sampler, self.valid_sampler = self._split_sampler(self.validation_split)
 
         self.init_kwargs = {
-            'dataset': dataset,
-            'batch_size': batch_size,
-            'shuffle': self.shuffle,
-            'collate_fn': collate_fn,
-            'num_workers': num_workers
+            "dataset": dataset,
+            "batch_size": batch_size,
+            "shuffle": self.shuffle,
+            "collate_fn": collate_fn,
+            "num_workers": num_workers,
         }
         super().__init__(sampler=self.sampler, **self.init_kwargs)
 
@@ -37,7 +66,9 @@ class BaseDataLoader(DataLoader):
 
         if isinstance(split, int):
             assert split > 0
-            assert split < self.n_samples, "validation set size is configured to be larger than entire dataset."
+            assert (
+                split < self.n_samples
+            ), "validation set size is configured to be larger than entire dataset."
             len_valid = split
         else:
             len_valid = int(self.n_samples * split)

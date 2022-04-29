@@ -13,8 +13,8 @@ def mnist_accuracy(output, target):
 
 
 def accuracy(output, target):
-    # output = output.detach().cpu().numpy()
-    # target = target.detach().cpu().numpy()
+    output = output.detach().cpu()
+    target = target.detach().cpu()
     acc = accuracy_score(target, np.where(output >= 0.5, 1, 0))
     return acc
 
@@ -30,5 +30,11 @@ def top_k_acc(output, target, k=3):
 
 
 def roc_auc(output, target):
-    auc = roc_auc_score(target, output)
-    return auc
+    output = output.detach().cpu().numpy()
+    target = target.detach().cpu().numpy()
+    try:
+        auc = roc_auc_score(target, output)
+        return auc
+    except ValueError:
+        print(ValueError)
+        return 0
