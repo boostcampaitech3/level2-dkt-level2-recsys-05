@@ -49,7 +49,7 @@ class BaseTrainer:
         Full training logic
         """
 
-        run = wandb.init(project="p-stage-level2-dkt", entity=self.config["entity"], name = f'oof_{oof}_' + self.config["name"])
+        wandb.init(project="p-stage-level2-dkt", entity=self.config["entity"], name = f'oof_{oof}_' + self.config["name"])
         
         wandb.config.update({
             "batch_size" : self.config["data_loader"]["args"]["batch_size"],
@@ -83,3 +83,5 @@ class BaseTrainer:
             'valid_acc' : valid_acc,
             'valid_roc_auc' : valid_roc_auc,
             })
+
+        wandb.finish()
