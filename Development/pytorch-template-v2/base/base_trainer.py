@@ -53,7 +53,7 @@ class BaseTrainer:
             if self.lr_scheduler:
                 self.lr_scheduler.step()
             print(f'OOF-{oof}| Epoch: {epoch:3d}| train_loss: {train_loss:.5f}| train_acc: {train_acc:.5f}| train_roc_auc: {train_roc_auc:.5f}')
-            print(f'                     valid_loss: {valid_loss:.5f}| valid_acc: {valid_acc:.5f}| valid_roc_auc: {valid_roc_auc:.5f}')
+            print(f'                   valid_loss: {valid_loss:.5f}| valid_acc: {valid_acc:.5f}| valid_roc_auc: {valid_roc_auc:.5f}')
 
             if self.best_roc_auc < valid_roc_auc:
                 self.best_epoch = epoch
