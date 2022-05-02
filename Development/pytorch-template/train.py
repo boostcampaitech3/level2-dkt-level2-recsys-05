@@ -48,7 +48,6 @@ def main(config):
     optimizer = config.init_obj("optimizer", torch.optim, trainable_params)
     lr_scheduler = config.init_obj("lr_scheduler", torch.optim.lr_scheduler, optimizer)
 
-    print(config["trainer"]["type"])
     trainer_module = getattr(
         importlib.import_module(f'trainer.{config["trainer"]["type"]}'),
         config["trainer"]["type"],
