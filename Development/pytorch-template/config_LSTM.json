@@ -19,7 +19,8 @@
             "num_workers": 5,
             "asset_dir" : "asset/",
             "file_name" : "train_data.csv",
-            "max_seq_len" : 20
+            "max_seq_len" : 20,
+            "collate_fn" : "sequence_collate"
         }
     },
     "optimizer": {

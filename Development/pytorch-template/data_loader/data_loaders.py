@@ -3,15 +3,13 @@ from torchvision import transforms
 import torch
 from base import BaseDataLoader
 import numpy as np
-from preprocess import Preprocess
-
-from torch.nn.utils.rnn import pad_sequence
+from preprocess import LSTMPreprocess
 
 
 class DKTDataset(torch.utils.data.Dataset):
-    def __init__(self, data, args):
+    def __init__(self, data, bargs):
         self.data = data
-        self.args = args
+        self.args = bargs
 
     def __getitem__(self, index):
         row = self.data[index]
@@ -38,31 +36,10 @@ class DKTDataset(torch.utils.data.Dataset):
         # np.array -> torch.tensor 형변환
         for i, col in enumerate(cate_cols):
             cate_cols[i] = torch.tensor(col)
-        # for el in cate_cols:
-        #     print(el.shape)
-        # print('-'*20)
         return cate_cols
 
     def __len__(self):
         return len(self.data)
-
-
-def collate(batch):
-    col_n = len(batch[0])
-    col_list = [[] for _ in range(col_n)]
-    max_seq_len = len(batch[0][-1])
-
-    # batch의 값들을 각 column끼리 그룹화
-    for row in batch:
-        for i, col in enumerate(row):
-            pre_padded = torch.zeros(max_seq_len)
-            pre_padded[-len(col) :] = col
-            col_list[i].append(pre_padded)
-
-    for i, _ in enumerate(col_list):
-        col_list[i] = torch.stack(col_list[i])
-
-    return tuple(col_list)
 
 
 class MnistDataLoader(BaseDataLoader):
@@ -74,6 +51,8 @@ class MnistDataLoader(BaseDataLoader):
         self,
         data_dir,
         batch_size,
+        collate_fn="default_collate",
+        bargs=None,
         shuffle=True,
         validation_split=0.0,
         num_workers=1,
@@ -87,45 +66,48 @@ class MnistDataLoader(BaseDataLoader):
             self.data_dir, train=training, download=True, transform=trsfm
         )
         super().__init__(
-            self.dataset, batch_size, shuffle, validation_split, num_workers
+            self.dataset,
+            batch_size,
+            shuffle,
+            validation_split,
+            num_workers,
+            collate_fn=collate_fn,
         )
 
 
 class IscreamDataLoader(BaseDataLoader):
     def __init__(
         self,
-        data_dir,
         batch_size,
         bargs,
+        asset_dir,
+        data_dir,
+        file_name,
+        collate_fn="sequence_collate",
+        max_seq_len=20,
         shuffle=True,
         validation_split=0.0,
         num_workers=1,
         training=True,
     ):
 
-        # self.data_dir = "/opt/ml/input/data/"
-
-        # TODO: preprocess 후, dataset생성 -> Dkt train.py 참조
-        # args = Box(
-        #     {
-        #         "asset_dir" : "asset/",
-        #         "data_dir" : "/opt/ml/input/data/",
-        #         "file_name" : "train_data.csv",
-        #         "max_seq_len" : 20
-        #     }
-        # )
-        bargs.asset_dir = "asset/"
-        bargs.data_dir = "/opt/ml/input/data/"
-        bargs.file_name = "train_data.csv"
-        bargs.max_seq_len = 20
+        bargs.asset_dir = asset_dir
+        bargs.data_dir = data_dir
+        bargs.file_name = file_name
+        bargs.max_seq_len = max_seq_len
 
         print("preprocessing iscream data...")
-        preprocess = Preprocess(bargs)
+        preprocess = LSTMPreprocess(bargs)
         preprocess.load_train_data(bargs.file_name)
         train_data = preprocess.get_train_data()
         print("preprocess complete!")
 
         self.dataset = DKTDataset(train_data, bargs)
         super().__init__(
-            self.dataset, batch_size, shuffle, validation_split, num_workers
+            self.dataset,
+            batch_size,
+            shuffle,
+            validation_split,
+            num_workers,
+            collate_fn=collate_fn,
         )
