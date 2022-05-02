@@ -15,6 +15,8 @@ import data_loader.data_loaders as module_data_loaders
 import model.loss as module_loss
 import model.model as module_arch
 
+import wandb
+
 # fix random seeds for reproducibility
 def seed_everything(seed):
     torch.manual_seed(seed)

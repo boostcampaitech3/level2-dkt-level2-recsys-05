@@ -1,5 +1,9 @@
 from torch.utils.data import DataLoader
+from torch.utils.data.dataloader import default_collate
+
 from base import collate_fn as collate_fn_set
+
+default_collate = default_collate
 
 class TransformerDataLoader(DataLoader):
     def __init__(

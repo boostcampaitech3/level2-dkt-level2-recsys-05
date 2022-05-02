@@ -1,5 +1,8 @@
 import torch
 import numpy as np
+from torch.utils.data.dataloader import default_collate
+
+default_collate = default_collate
 
 def pad_sequence(seq, max_len, padding_value = 0):
     try:

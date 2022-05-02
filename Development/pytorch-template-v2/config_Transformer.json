@@ -1,5 +1,6 @@
 {
     "name": "Transformer-test",
+    "entity" : "seongbeom",
 
     "preprocess": {
         "type": "TransformerPreprocess",
@@ -18,7 +19,7 @@
     "data_loader" : {
         "type": "TransformerDataLoader",
         "args": {
-            "batch_size" : 32,
+            "batch_size" : 64,
             "shuffle" : true,
             "num_workers" : 8,
             "collate_fn" : "transformer_collate"
@@ -49,7 +50,7 @@
 
     "trainer" : {
         "type" : "TransformerTrainer",
-        "epochs": 1,
+        "epochs": 3,
         "oof" : 5,
         "seed" : 22,
         "save_dir": "/opt/ml/model",

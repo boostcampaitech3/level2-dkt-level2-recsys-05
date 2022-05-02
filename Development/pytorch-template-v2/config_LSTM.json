@@ -1,5 +1,6 @@
 {
-    "name": "LSTM-test",
+    "name": "Transformer-test",
+    "entity" : "seongbeom",
 
     "preprocess": {
         "type": "TransformerPreprocess",

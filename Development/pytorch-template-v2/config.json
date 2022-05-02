@@ -1,5 +1,6 @@
 {
-    "name": "Transformer-test",
+    "name": "모델이름",
+    "entity" : "wandb에 연결된 계정명",
 
     "preprocess": {
         "type": "TransformerPreprocess",

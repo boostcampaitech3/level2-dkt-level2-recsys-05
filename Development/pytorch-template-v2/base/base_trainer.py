@@ -1,6 +1,7 @@
 import os
 import torch
 from abc import abstractmethod
+import wandb
 
 
 class BaseTrainer:
@@ -47,6 +48,18 @@ class BaseTrainer:
         """
         Full training logic
         """
+
+        run = wandb.init(project="p-stage-level2-dkt", entity=self.config["entity"], name = f'oof_{oof}_' + self.config["name"])
+        
+        wandb.config.update({
+            "batch_size" : self.config["data_loader"]["args"]["batch_size"],
+            "lr": self.config["optimizer"]["args"]["lr"],
+            "weight_decay" : self.config["optimizer"]["args"]["weight_decay"],
+            "epochs": self.config["trainer"]["epochs"],
+        })
+        
+        wandb.config.update(self.config["arch"]["args"])
+
         for epoch in range(self.start_epoch, self.epochs + 1):
             train_loss, train_acc, train_roc_auc = self._train_epoch()
             valid_loss, valid_acc, valid_roc_auc = self._valid_epoch()
@@ -61,6 +74,12 @@ class BaseTrainer:
                 self.best_acc = valid_acc
                 self.best_roc_auc = valid_roc_auc
                 torch.save(self.model.state_dict(), os.path.join(self.save_dir, f'oof_{oof}_' + self.config['name'] + '.pt'))
-
-            # TODO
-            # MLflow 연동
+            
+            wandb.log({
+            'train_loss' : train_loss,
+            'train_acc' : train_acc,
+            'train_roc_auc' : train_roc_auc,
+            'valid_loss' : valid_loss,
+            'valid_acc' : valid_acc,
+            'valid_roc_auc' : valid_roc_auc,
+            })
