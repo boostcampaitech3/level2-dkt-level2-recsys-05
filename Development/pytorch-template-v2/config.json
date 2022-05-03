@@ -1,6 +1,6 @@
 {
     "name": "모델이름",
-    "entity" : "wandb에 연결된 계정명",
+    "entity" : "wandb project 만든 사람 계정명",
     
     "cat_cols" : ["사용할 cat cols"], 
     "num_cols" : ["사용할 num cols"],

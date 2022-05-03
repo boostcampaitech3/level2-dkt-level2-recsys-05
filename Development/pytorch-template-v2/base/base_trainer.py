@@ -56,6 +56,8 @@ class BaseTrainer:
             "lr": self.config["optimizer"]["args"]["lr"],
             "weight_decay" : self.config["optimizer"]["args"]["weight_decay"],
             "epochs": self.config["trainer"]["epochs"],
+            "cat_cols": self.config["cat_cols"],
+            "num_cols": self.config["num_cols"],
         })
         
         wandb.config.update(self.config["arch"]["args"])
