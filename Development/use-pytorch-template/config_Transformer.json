@@ -1,6 +1,7 @@
 {
     "name": "Transformer-test",
-    "entity" : "seongbeom",
+    "project" : "p-stage-level2-dkt-team",
+    "entity" : "dkt-azdks",
 
     "cat_cols" : ["assessmentItemID2idx", "testId2idx", "KnowledgeTag2idx", "large_paper_number2idx", "hour", "dayofweek"], 
     "num_cols" : ["now_elapsed", "assessmentItemID_mean_now_elapsed", "assessmentItemID_std_now_elapsed", "assessmentItemID_mean_answerCode", "assessmentItemID_std_answerCode"],
