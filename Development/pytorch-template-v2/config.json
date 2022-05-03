@@ -7,31 +7,31 @@
 
 
     "preprocess": {
-        "type": "TransformerPreprocess",
+        "type": "사용할 Preprocess",
         "args": {
             "data_dir": "/opt/ml/input/data"
         }
     },
 
     "dataset" : {
-        "type": "TransformerDataset",
+        "type": "사용할 Dataset",
         "args": {
             "data_augmentation" : false
         }
     },
 
     "data_loader" : {
-        "type": "TransformerDataLoader",
+        "type": "사용할 DataLoader",
         "args": {
             "batch_size" : 32,
             "shuffle" : true,
             "num_workers" : 8,
-            "collate_fn" : "transformer_collate"
+            "collate_fn" : "시용할 collate"
         }
     },
 
     "arch" : {
-        "type": "TransformerAndLSTMEncoderDeocoderEachEmbedding",
+        "type": "사용할 모델",
         "args": {
             "hidden_dim" : 128,
             "embedding_size" : 64,
@@ -53,7 +53,7 @@
     },
 
     "trainer" : {
-        "type" : "TransformerTrainer",
+        "type" : "사용할 Trainer",
         "epochs": 1,
         "oof" : 5,
         "seed" : 22,

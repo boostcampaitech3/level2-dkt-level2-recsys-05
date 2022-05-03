@@ -1,6 +1,6 @@
 from torch.utils.data import Dataset
 
-class TransformerDataset(Dataset):
+class SequenceDataset(Dataset):
     def __init__(
         self,
         bargs,

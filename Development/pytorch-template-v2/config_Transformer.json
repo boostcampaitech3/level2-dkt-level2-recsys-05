@@ -6,26 +6,26 @@
     "num_cols" : ["now_elapsed", "assessmentItemID_mean_now_elapsed", "assessmentItemID_std_now_elapsed", "assessmentItemID_mean_answerCode", "assessmentItemID_std_answerCode"],
 
     "preprocess": {
-        "type": "TransformerPreprocess",
+        "type": "SequencePreprocess",
         "args": {
             "data_dir": "/opt/ml/input/data"
         }
     },
 
     "dataset" : {
-        "type": "TransformerDataset",
+        "type": "SequenceDataset",
         "args": {
             "data_augmentation" : false
         }
     },
 
     "data_loader" : {
-        "type": "TransformerDataLoader",
+        "type": "SequenceDataLoader",
         "args": {
             "batch_size" : 64,
             "shuffle" : true,
             "num_workers" : 8,
-            "collate_fn" : "transformer_collate"
+            "collate_fn" : "sequence_collate"
         }
     },
 
@@ -52,7 +52,7 @@
     },
 
     "trainer" : {
-        "type" : "TransformerTrainer",
+        "type" : "SequenceTrainer",
         "epochs": 1,
         "oof" : 5,
         "seed" : 22,

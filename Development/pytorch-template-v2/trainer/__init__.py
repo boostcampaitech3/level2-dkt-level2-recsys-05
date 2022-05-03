@@ -1,1 +1,1 @@
-from .TransformerTrainer import *
+from .SequenceTrainer import *

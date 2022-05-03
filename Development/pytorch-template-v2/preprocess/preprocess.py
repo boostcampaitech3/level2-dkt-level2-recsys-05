@@ -4,7 +4,7 @@ import pandas as pd
 from sklearn.model_selection import KFold
 
 
-class TransformerPreprocess:
+class SequencePreprocess:
     def __init__(self, bargs, data_dir):
         self.args = bargs
         self.data_dir = data_dir

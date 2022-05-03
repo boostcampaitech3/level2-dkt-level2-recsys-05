@@ -4,7 +4,7 @@ from base import BaseTrainer
 from model.metric import accuracy, roc_auc
 
 
-class TransformerTrainer(BaseTrainer):
+class SequenceTrainer(BaseTrainer):
     """
     Trainer class
     """

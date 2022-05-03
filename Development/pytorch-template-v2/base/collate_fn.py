@@ -16,7 +16,7 @@ def pad_sequence(seq, max_len, padding_value = 0):
 
     return padding_seq
 
-def transformer_collate(samples):
+def sequence_collate(samples):
     max_len = 0
     for sample in samples:
         seq_len, col = sample['past_cat_feature'].shape

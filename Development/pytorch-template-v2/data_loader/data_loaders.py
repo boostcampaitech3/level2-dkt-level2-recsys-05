@@ -5,14 +5,14 @@ from base import collate_fn as collate_fn_set
 
 default_collate = default_collate
 
-class TransformerDataLoader(DataLoader):
+class SequenceDataLoader(DataLoader):
     def __init__(
         self,
         dataset,
         batch_size,
         shuffle,
         num_workers,
-        collate_fn="transformer_collate",
+        collate_fn="sequence_collate",
         is_train = True,
     ):
         self.shuffle = shuffle
