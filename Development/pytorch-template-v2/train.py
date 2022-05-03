@@ -35,15 +35,9 @@ def main(config):
 
     # 데이터와 모델 연결되는 args
     bridge_args = Box({
-        'cat_cols' : ['assessmentItemID2idx', 'testId2idx', 'KnowledgeTag2idx', 'large_paper_number2idx', 'hour', 'dayofweek'], 
-        'num_cols' : ['now_elapsed', 'assessmentItemID_mean_now_elapsed', 'assessmentItemID_std_now_elapsed', 'assessmentItemID_mean_answerCode', 'assessmentItemID_std_answerCode']
+        'cat_cols' : config['cat_cols'], 
+        'num_cols' : config['num_cols'],
         })
-    
-    # bridge_args = Box({
-    #     'cat_cols' : config['cat_cols'], 
-    #     'num_cols' : config['num_cols'],
-    #     })
-
 
     print("preprocessing data...")
     preprocess_data = config.init_obj("preprocess", module_preprocess, bargs=bridge_args)

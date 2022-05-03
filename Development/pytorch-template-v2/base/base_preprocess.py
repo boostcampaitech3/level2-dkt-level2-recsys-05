@@ -1,49 +1,25 @@
 import os
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import KFold
+from abc import abstractmethod
 
 
-class TransformerPreprocess:
+class BasePreprocess:
     def __init__(self, bargs, data_dir):
         self.args = bargs
         self.data_dir = data_dir
 
+    @ abstractmethod
     def get_train_data(self):
-        return self.train_data
+        raise NotImplementedError
 
+    @ abstractmethod
     def get_test_data(self):
-        return self.test_data
+        raise NotImplementedError
 
-    def get_split_data(self, oof = 0):
-        val_user_list = self.oof_user_set[oof]
-        train = []
-        valid = []
-
-        group_df = self.train_data.groupby('userID')
-
-        for userID, df in group_df:
-            if userID in val_user_list:
-                trn_df = df.iloc[:-1, :]
-                val_df = df.copy()
-                train.append(trn_df)
-                valid.append(val_df)
-            else:
-                train.append(df)
-
-        train = pd.concat(train).reset_index(drop = True)
-        valid = pd.concat(valid).reset_index(drop = True)
-        
-        return train, valid
-
-    def split_user_set(self, all_df, oof = 5, seed = 22):
-        user_list = all_df['userID'].unique().tolist()
-        oof_user_set = {}
-        kf = KFold(n_splits = oof, random_state = seed, shuffle = True)
-        for idx, (train_user, valid_user) in enumerate(kf.split(user_list)):
-            oof_user_set[idx] = valid_user.tolist()
-
-        return oof_user_set
+    @ abstractmethod
+    def get_split_data(self):
+        raise NotImplementedError
 
     def __preprocessing(self, df):
 
