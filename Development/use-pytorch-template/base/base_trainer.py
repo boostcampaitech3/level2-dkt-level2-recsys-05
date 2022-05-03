@@ -49,7 +49,7 @@ class BaseTrainer:
         Full training logic
         """
 
-        wandb.init(project="p-stage-level2-dkt", entity=self.config["entity"], name = f'oof_{oof}_' + self.config["name"])
+        wandb.init(project=self.config["project"], entity=self.config["entity"], name = f'oof_{oof}_' + self.config["name"])
         
         wandb.config.update({
             "batch_size" : self.config["data_loader"]["args"]["batch_size"],
