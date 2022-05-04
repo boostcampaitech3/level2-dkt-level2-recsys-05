@@ -1,6 +1,7 @@
 {
-    "name": "Transformer-test",
-    "entity" : "seongbeom",
+    "name": "TransformerAndLSTMEncoderDeocoderEachEmbedding",
+    "project" : "p-stage-level2-dkt-team",
+    "entity" : "dkt-azdks",
 
     "cat_cols" : ["assessmentItemID2idx", "testId2idx", "KnowledgeTag2idx", "large_paper_number2idx", "hour", "dayofweek"], 
     "num_cols" : ["now_elapsed", "assessmentItemID_mean_now_elapsed", "assessmentItemID_std_now_elapsed", "assessmentItemID_mean_answerCode", "assessmentItemID_std_answerCode"],
@@ -22,7 +23,7 @@
     "data_loader" : {
         "type": "SequenceDataLoader",
         "args": {
-            "batch_size" : 64,
+            "batch_size" : 32,
             "shuffle" : true,
             "num_workers" : 8,
             "collate_fn" : "sequence_collate"
@@ -33,7 +34,7 @@
         "type": "TransformerAndLSTMEncoderDeocoderEachEmbedding",
         "args": {
             "hidden_dim" : 128,
-            "embedding_size" : 64,
+            "embedding_size" : 32,
             "num_heads" : 2,
             "num_layers" : 1,
             "dropout_rate" : 0.5
@@ -53,7 +54,7 @@
 
     "trainer" : {
         "type" : "SequenceTrainer",
-        "epochs": 1,
+        "epochs": 20,
         "oof" : 5,
         "seed" : 22,
         "save_dir": "/opt/ml/model",

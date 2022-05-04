@@ -37,7 +37,8 @@ Config files are in `.json` format:
 ```javascript
 {
     "name": "모델이름",
-    "entity" : "wandb project 만든 사람 계정명",
+    "project" : "프로젝트 이름",
+    "entity" : "프로젝트 entitiy 명",
     
     "cat_cols" : ["사용할 cat cols"], 
     "num_cols" : ["사용할 num cols"],
