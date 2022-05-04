@@ -70,8 +70,7 @@ class SequenceTrainer(BaseTrainer):
         outputs = []
 
         with torch.no_grad():
-            # for batch_idx, (data, target) in enumerate(self.valid_data_loader):
-            for data in self.data_loader:
+            for data in self.valid_data_loader:
                 target = data['now_answerCode'].to(self.device)
                 output = self.model(data)
 
@@ -80,5 +79,5 @@ class SequenceTrainer(BaseTrainer):
                 targets.extend(target[:, -1].cpu().numpy().tolist())
                 outputs.extend(output[:, -1].cpu().numpy().tolist())
 
-        loss_val /= len(self.data_loader)
+        loss_val /= len(self.valid_data_loader)
         return loss_val, accuracy(np.array(outputs), np.array(targets)), roc_auc(outputs, targets)
