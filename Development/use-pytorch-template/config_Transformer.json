@@ -1,5 +1,5 @@
 {
-    "name": "TransformerAndLSTMEncoderDeocoderEachEmbedding",
+    "name": "TransformerAndLSTMEncoderDeocoderEachEmbedding-2022-05-05-02-12",
     "project" : "p-stage-level2-dkt-team",
     "entity" : "dkt-azdks",
 
@@ -33,11 +33,11 @@
     "arch" : {
         "type": "TransformerAndLSTMEncoderDeocoderEachEmbedding",
         "args": {
-            "hidden_dim" : 128,
-            "embedding_size" : 32,
+            "hidden_dim" : 256,
+            "embedding_size" : 64,
             "num_heads" : 2,
             "num_layers" : 1,
-            "dropout_rate" : 0.5
+            "dropout_rate" : 0.7
         }
     },
 
@@ -47,7 +47,7 @@
         "type": "Adam",
         "args":{
             "lr": 0.001,
-            "weight_decay": 0,
+            "weight_decay": 0.001,
             "amsgrad": false
         }
     },
