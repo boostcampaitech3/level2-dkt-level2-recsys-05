@@ -53,13 +53,14 @@ class BaseTrainer:
         
         wandb.config.update({
             "batch_size" : self.config["data_loader"]["args"]["batch_size"],
-            "lr": self.config["optimizer"]["args"]["lr"],
-            "weight_decay" : self.config["optimizer"]["args"]["weight_decay"],
             "epochs": self.config["trainer"]["epochs"],
             "cat_cols": self.config["cat_cols"],
             "num_cols": self.config["num_cols"],
             "model-arch": self.config["arch"]["type"],
+            "optimizer": self.config["optimizer"]["type"],
         })
+
+        wandb.config.update(self.config["optimizer"]["args"])
         
         wandb.config.update(self.config["arch"]["args"])
 
