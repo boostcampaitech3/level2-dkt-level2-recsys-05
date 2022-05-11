@@ -46,7 +46,7 @@ def main(config):
     print("preprocess complete!")
 
     for oof in range(config['trainer']['oof']):
-        seed_everything(config['trainer']['seed'])
+        seed_everything(config['trainer']['seed'] + oof)
         train_df, valid_df = preprocess_data.get_split_data(oof)
 
         train_dataset = config.init_obj("dataset", module_datasets, bargs=bridge_args, df = train_df)
