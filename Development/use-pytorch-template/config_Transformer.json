@@ -1,5 +1,9 @@
 {
+<<<<<<< Updated upstream
     "name": "TransformerAndLSTMEncoderDeocoderEachEmbedding-2022-05-05-02-12",
+=======
+    "name": "Transformer",
+>>>>>>> Stashed changes
     "project" : "p-stage-level2-dkt-team",
     "entity" : "dkt-azdks",
 
@@ -33,8 +37,8 @@
     "arch" : {
         "type": "TransformerAndLSTMEncoderDeocoderEachEmbedding",
         "args": {
-            "hidden_dim" : 256,
-            "embedding_size" : 64,
+            "hidden_dim" : 128,
+            "embedding_size" : 32,
             "num_heads" : 2,
             "num_layers" : 1,
             "dropout_rate" : 0.7
