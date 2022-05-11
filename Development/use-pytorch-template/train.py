@@ -14,6 +14,7 @@ import dataset.datasets as module_datasets
 import data_loader.data_loaders as module_data_loaders
 import model.loss as module_loss
 import model.model as module_arch
+import mlflow
 
 import wandb
 
@@ -90,5 +91,20 @@ if __name__ == "__main__":
     args.add_argument('-d', '--device', default=None, type=str,
                       help='indices of GPUs to enable (default: all)')
     
+    
     config = ConfigParser.from_args(args)
-    main(config)
+    remote_server_uri ='http://34.64.167.85:5000'
+    mlflow.set_tracking_uri(remote_server_uri)
+    
+    experiment_name = "/my-experiment3"
+    experiment = mlflow.get_experiment_by_name(experiment_name)
+    if experiment == None:
+        experiment = mlflow.set_experiment(experiment_name)
+    client = mlflow.tracking.MlflowClient()
+    
+    run = client.create_run(experiment.experiment_id)
+
+    with mlflow.start_run(run_id=run.info.run_id):
+        mlflow.set_tag('mlflow.user', 'test')
+        main(config)
+    

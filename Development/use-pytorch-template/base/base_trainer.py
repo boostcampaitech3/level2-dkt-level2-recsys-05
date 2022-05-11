@@ -2,6 +2,7 @@ import os
 import torch
 from abc import abstractmethod
 import wandb
+import mlflow
 
 
 class BaseTrainer:
@@ -76,6 +77,8 @@ class BaseTrainer:
                 self.best_acc = valid_acc
                 self.best_roc_auc = valid_roc_auc
                 torch.save(self.model.state_dict(), os.path.join(self.save_dir, f'oof_{oof}_' + self.config['name'] + '.pt'))
+                mlflow.pytorch.log_model(self.model, f'oof_{oof}_' + self.config['name'])
+                # mlflow.pytorch.log_state_dict(self.model.state_dict(), f'oof_{oof}_' + self.config['name'])
             
             wandb.log({
             'train_loss' : train_loss,
@@ -85,5 +88,12 @@ class BaseTrainer:
             'valid_acc' : valid_acc,
             'valid_roc_auc' : valid_roc_auc,
             })
+            mlflow.log_metric('train_loss', train_loss)
+            mlflow.log_metric('train_acc', train_acc)
+            mlflow.log_metric('train_roc_auc', train_roc_auc)
+            mlflow.log_metric('valid_loss', valid_loss)
+            mlflow.log_metric('valid_acc', valid_acc)
+            mlflow.log_metric('valid_roc_auc', valid_roc_auc)
+            
 
         wandb.finish()
