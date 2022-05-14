@@ -223,9 +223,9 @@ class LSTM(nn.Module):
 
         emb = torch.concat([cat_emb, num_emb], dim = -1)
 
-        emb, _ = self.lstm(emb)
+        emb, _ = self.lstm(self.dropout(emb))
 
-        output = self.predict_layer(self.dropout(emb))
+        output = self.predict_layer(emb)
 
         return output.squeeze(2)
 
@@ -407,7 +407,7 @@ class TransformerAndLSTMEncoderDeocoderEachEmbedding(nn.Module):
         now_emb, _ = self.now_lstm(now_emb)
         
         # predict
-        emb = torch.concat([past_emb, now_emb], dim = -1)
-        output = self.predict_layer(self.dropout(emb))
+        emb = torch.concat([self.dropout(past_emb), self.dropout(now_emb)], dim = -1)
+        output = self.predict_layer(emb)
 
         return output.squeeze(2)

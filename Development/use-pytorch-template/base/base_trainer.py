@@ -2,6 +2,7 @@ import os
 import torch
 from abc import abstractmethod
 import wandb
+import mlflow
 
 
 class BaseTrainer:
@@ -53,13 +54,14 @@ class BaseTrainer:
         
         wandb.config.update({
             "batch_size" : self.config["data_loader"]["args"]["batch_size"],
-            "lr": self.config["optimizer"]["args"]["lr"],
-            "weight_decay" : self.config["optimizer"]["args"]["weight_decay"],
             "epochs": self.config["trainer"]["epochs"],
             "cat_cols": self.config["cat_cols"],
             "num_cols": self.config["num_cols"],
             "model-arch": self.config["arch"]["type"],
+            "optimizer": self.config["optimizer"]["type"],
         })
+
+        wandb.config.update(self.config["optimizer"]["args"])
         
         wandb.config.update(self.config["arch"]["args"])
 
@@ -77,6 +79,8 @@ class BaseTrainer:
                 self.best_acc = valid_acc
                 self.best_roc_auc = valid_roc_auc
                 torch.save(self.model.state_dict(), os.path.join(self.save_dir, f'oof_{oof}_' + self.config['name'] + '.pt'))
+                mlflow.pytorch.log_model(self.model, f'oof_{oof}_' + self.config['name'])
+                # mlflow.pytorch.log_state_dict(self.model.state_dict(), f'oof_{oof}_' + self.config['name'])
             
             wandb.log({
             'train_loss' : train_loss,
@@ -86,5 +90,12 @@ class BaseTrainer:
             'valid_acc' : valid_acc,
             'valid_roc_auc' : valid_roc_auc,
             })
+            mlflow.log_metric('train_loss', train_loss)
+            mlflow.log_metric('train_acc', train_acc)
+            mlflow.log_metric('train_roc_auc', train_roc_auc)
+            mlflow.log_metric('valid_loss', valid_loss)
+            mlflow.log_metric('valid_acc', valid_acc)
+            mlflow.log_metric('valid_roc_auc', valid_roc_auc)
+            
 
         wandb.finish()
